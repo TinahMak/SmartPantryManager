@@ -1,0 +1,8 @@
+buildscript {
+    ext {
+        agp_version = '9.4.1'
+    }
+}
+plugins {
+    id 'com.android.application' version '9.4.1' apply false
+}
