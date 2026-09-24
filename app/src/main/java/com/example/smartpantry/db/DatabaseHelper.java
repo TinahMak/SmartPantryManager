@@ -114,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.query(TABLE_PANTRY, null, null, null, null, null, COL_P_NAME + " ASC");
+        Cursor c = db.query(TABLE_PANTRY, null, null, null, null, null, COL_P_NAME + " COLLATE NOCASE ASC");
         while (c.moveToNext()) {
             list.add(new Ingredient(
                     c.getLong(c.getColumnIndexOrThrow(COL_P_ID)),
