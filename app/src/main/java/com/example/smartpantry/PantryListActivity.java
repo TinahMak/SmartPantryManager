@@ -24,6 +24,7 @@ import java.util.List;
  * using a RecyclerView + custom adapter. Supports tapping an item to edit it,
  * a delete button per row, and a FAB to add a new item.
  */
+import androidx.appcompat.app.AlertDialog;
 public class PantryListActivity extends AppCompatActivity implements IngredientAdapter.Listener {
 
     private DatabaseHelper dbHelper;
@@ -94,8 +95,15 @@ public class PantryListActivity extends AppCompatActivity implements IngredientA
 
     @Override
     public void onDelete(Ingredient ingredient) {
-        dbHelper.deleteIngredient(ingredient.getId());
-        Toast.makeText(this, ingredient.getName() + " removed", Toast.LENGTH_SHORT).show();
-        loadPantry();
+        new AlertDialog.Builder(this)
+                .setTitle("Delete ingredient")
+                .setMessage("Remove " + ingredient.getName() + " from your pantry?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    dbHelper.deleteIngredient(ingredient.getId());
+                    Toast.makeText(this, ingredient.getName() + " removed", Toast.LENGTH_SHORT).show();
+                    loadPantry();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 }
