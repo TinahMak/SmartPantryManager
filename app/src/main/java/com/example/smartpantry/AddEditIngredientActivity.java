@@ -86,6 +86,17 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(unit)) {
             unit = "unit"; // sensible default for countable items
         }
+        if (!TextUtils.isEmpty(expiry)) {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+            sdf.setLenient(false);
+            try {
+                sdf.parse(expiry);
+            } catch (java.text.ParseException e) {
+                etExpiry.setError("Enter date as yyyy-MM-dd, e.g. 2026-12-31");
+                etExpiry.requestFocus();
+                return;
+            }
+        }
 
         if (editingId == -1) {
             dbHelper.addIngredient(name, quantity, unit, expiry);
