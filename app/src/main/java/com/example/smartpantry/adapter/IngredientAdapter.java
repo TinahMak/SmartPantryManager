@@ -12,6 +12,13 @@ import com.example.smartpantry.R;
 import com.example.smartpantry.model.Ingredient;
 
 import java.util.List;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import com.example.smartpantry.SettingsActivity;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
 
@@ -44,11 +51,30 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
         if (item.getExpiryDate() != null && !item.getExpiryDate().isEmpty()) {
             holder.expiry.setVisibility(View.VISIBLE);
-            holder.expiry.setText("Expires: " + item.getExpiryDate());
+
+            SharedPreferences prefs = holder.itemView.getContext()
+                    .getSharedPreferences(SettingsActivity.PREFS_NAME, android.content.Context.MODE_PRIVATE);
+            boolean alertsOn = prefs.getBoolean(SettingsActivity.KEY_EXPIRY_ALERTS, true);
+            boolean expiringSoon = false;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Date expiryDate = sdf.parse(item.getExpiryDate());
+                long daysLeft = (expiryDate.getTime() - System.currentTimeMillis()) / (1000 * 60 * 60 * 24);
+                expiringSoon = daysLeft <= 7;
+            } catch (ParseException e) {
+                expiringSoon = false;
+            }
+
+            if (alertsOn && expiringSoon) {
+                holder.expiry.setTextColor(Color.RED);
+                holder.expiry.setText("⚠ Expires: " + item.getExpiryDate());
+            } else {
+                holder.expiry.setTextColor(Color.parseColor("#666666"));
+                holder.expiry.setText("Expires: " + item.getExpiryDate());
+            }
         } else {
             holder.expiry.setVisibility(View.GONE);
         }
-
         holder.itemView.setOnClickListener(v -> listener.onEdit(item));
         holder.deleteBtn.setOnClickListener(v -> listener.onDelete(item));
     }
