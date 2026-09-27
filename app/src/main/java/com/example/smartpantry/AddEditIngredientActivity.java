@@ -10,7 +10,20 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.smartpantry.db.DatabaseHelper;
 import com.example.smartpantry.model.Ingredient;
 import com.google.android.material.textfield.TextInputEditText;
-
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import com.example.smartpantry.SettingsActivity;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import com.example.smartpantry.SettingsActivity;
 /**
  * Screen 2: Add OR Edit an ingredient (same screen serves both, following the
  * assignment's minimum-screens requirement). Performs input validation before
@@ -65,6 +78,17 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             etName.requestFocus();
             return;
         }
+
+        if (editingId == -1) {
+            for (Ingredient existing : dbHelper.getAllIngredients()) {
+                if (existing.getName().trim().equalsIgnoreCase(name)) {
+                    etName.setError("This ingredient already exists - edit it instead of adding it again");
+                    etName.requestFocus();
+                    return;
+                }
+            }
+        }
+
         if (TextUtils.isEmpty(qtyStr)) {
             etQuantity.setError("Quantity is required");
             etQuantity.requestFocus();
