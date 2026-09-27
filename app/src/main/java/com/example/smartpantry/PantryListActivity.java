@@ -84,6 +84,11 @@ public class PantryListActivity extends AppCompatActivity implements IngredientA
         tvEmpty.setVisibility(ingredients.isEmpty() ? View.VISIBLE : View.GONE);
         adapter = new IngredientAdapter(ingredients, this);
         recyclerView.setAdapter(adapter);
+
+        if (getSupportActionBar() != null) {
+            int count = ingredients.size();
+            getSupportActionBar().setSubtitle(count + (count == 1 ? " item" : " items") + " in pantry");
+        }
     }
 
     @Override
