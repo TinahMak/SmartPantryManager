@@ -27,6 +27,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         long recipeId = getIntent().getLongExtra(EXTRA_RECIPE_ID, -1);
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Recipe recipe = dbHelper.getRecipe(recipeId);
