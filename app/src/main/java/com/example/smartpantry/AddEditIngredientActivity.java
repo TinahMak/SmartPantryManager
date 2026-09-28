@@ -45,6 +45,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         dbHelper = new DatabaseHelper(this);
         etName = findViewById(R.id.etName);
         etQuantity = findViewById(R.id.etQuantity);
